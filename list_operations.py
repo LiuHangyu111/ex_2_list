@@ -1,13 +1,7 @@
 participants = [
-    "Alice Wong",
-    "Chen Wei",
-    "David Kim",
-    "Fatima Ali",
-    "George Smith",
-    "Hana Lee",
-    "Audrey Hepburn",
-    "James Stewart",
-    "George Scott"
+    "Alice Wong", "Chen Wei", "David Kim", "Fatima Ali",
+    "George Smith", "Hana Lee", "Audrey Hepburn",
+    "James Stewart", "George Scott"
 ]
 
 scores = [78, 92, 64, 87, 55, 73, 69, 96, 90]
@@ -15,362 +9,174 @@ scores = [78, 92, 64, 87, 55, 73, 69, 96, 90]
 qualification_score = 70
 distinction_score = 90
 
-if len(participants) != len(scores):
-    print("Warning: Participants and scores lists have different lengths!")
-else:
-    print(f"Lists are synchronized with {len(participants)} participants.")
-
-print("\n" + "="*60)
-print("CURRENT PARTICIPANTS AND SCORES:")
-print("="*60)
-for name, score in zip(participants, scores):
-    print(f"  {name} | Score: {score}")
-print("="*60)
+def display_all():
+    print("\nCURRENT PARTICIPANTS AND SCORES:")
+    for name, score in zip(participants, scores):
+        print(f"  {name} | Score: {score}")
 
 def add_participant():
-    print("\n" + "-"*60)
-    print("ADD NEW PARTICIPANT")
-    print("-"*60)
-    
-    name = input("Enter participant's name: ").strip()
-    
-    if name == "":
+    name = input("Enter name: ").strip()
+    if not name:
         print("Error: Name cannot be empty!")
         return
-    
-    already_exists = False
-    for participant in participants:
-        if participant.lower() == name.lower():
-            already_exists = True
-            break
-    
-    if already_exists:
-        print(f"Error: '{name}' is already registered!")
-        return
-    
-    score_input = input("Enter score (0-100): ").strip()
-    
-    is_number = True
+    for p in participants:
+        if p.lower() == name.lower():
+            print(f"Error: '{name}' already registered!")
+            return
     try:
-        score = float(score_input)
+        score = float(input("Enter score (0-100): ").strip())
     except ValueError:
-        is_number = False
-    
-    if not is_number:
         print("Error: Score must be a number!")
         return
-    
     if score < 0 or score > 100:
         print("Error: Score must be between 0 and 100!")
         return
-    
     participants.append(name)
     scores.append(score)
     print(f"Successfully registered '{name}' with score {score}!")
 
 def search_participant():
-    print("\n" + "-"*60)
-    print("SEARCH PARTICIPANT")
-    print("-"*60)
-    
-    name = input("Enter participant's name to search: ").strip()
-    
-    if name == "":
+    name = input("Enter name to search: ").strip()
+    if not name:
         print("Error: Name cannot be empty!")
         return
-    
-    found = False
     for i in range(len(participants)):
         if participants[i].lower() == name.lower():
             score = scores[i]
-            found = True
             print(f"\n  Name: {participants[i]}")
             print(f"  Score: {score}")
-            
             if score >= distinction_score:
                 print("  Status: DISTINCTION")
             elif score >= qualification_score:
                 print("  Status: QUALIFIED")
             else:
                 print("  Status: NOT QUALIFIED")
-            break
-    
-    if not found:
-        print(f"Participant '{name}' not found!")
+            return
+    print(f"Participant '{name}' not found!")
 
 def display_all_status():
-    print("\n" + "="*60)
-    print("ALL PARTICIPANTS - STATUS REPORT")
-    print("="*60)
-    print("Name                 Score    Status")
-    print("-"*60)
-    
+    print("\nALL PARTICIPANTS - STATUS REPORT")
     for i in range(len(participants)):
-        name = participants[i]
         score = scores[i]
-        
         if score >= distinction_score:
             status = "DISTINCTION"
         elif score >= qualification_score:
             status = "QUALIFIED"
         else:
             status = "NOT QUALIFIED"
-        
-        print(f"{name:<20} {score:<8} {status}")
-    print("="*60)
+        print(f"{participants[i]} - Score: {score} - {status}")
 
 def check_distinctions_and_pass():
-    print("\n" + "-"*60)
-    print("DISTINCTION AND PASSING CHECK")
-    print("-"*60)
-    
     has_distinction = False
     all_passed = True
-    
     for score in scores:
         if score >= distinction_score:
             has_distinction = True
         if score < 50:
             all_passed = False
-    
-    if has_distinction:
-        print("  Has at least one DISTINCTION? Yes")
-    else:
-        print("  Has at least one DISTINCTION? No")
-    
-    if all_passed:
-        print("  All participants passed (>=50)? Yes")
-    else:
-        print("  All participants passed (>=50)? No")
-    
-    if has_distinction:
-        distinction_names = []
-        for i in range(len(participants)):
-            if scores[i] >= distinction_score:
-                distinction_names.append(participants[i])
-        print(f"  Distinction holders: {', '.join(distinction_names)}")
+    print(f"Has at least one DISTINCTION? {'Yes' if has_distinction else 'No'}")
+    print(f"All participants passed (>=50)? {'Yes' if all_passed else 'No'}")
 
 def update_score():
-    print("\n" + "-"*60)
-    print("UPDATE PARTICIPANT SCORE")
-    print("-"*60)
-    
-    name = input("Enter participant's name to update: ").strip()
-    
-    if name == "":
+    name = input("Enter name to update: ").strip()
+    if not name:
         print("Error: Name cannot be empty!")
         return
-    
-    found_index = -1
     for i in range(len(participants)):
         if participants[i].lower() == name.lower():
-            found_index = i
-            break
-    
-    if found_index == -1:
-        print(f"Participant '{name}' not found!")
-        return
-    
-    print(f"Current score for '{participants[found_index]}': {scores[found_index]}")
-    
-    score_input = input("Enter new score (0-100): ").strip()
-    
-    is_number = True
-    try:
-        new_score = float(score_input)
-    except ValueError:
-        is_number = False
-    
-    if not is_number:
-        print("Error: Score must be a number!")
-        return
-    
-    if new_score < 0 or new_score > 100:
-        print("Error: Score must be between 0 and 100!")
-        return
-    
-    scores[found_index] = new_score
-    print(f"Score updated successfully for '{participants[found_index]}' to {new_score}!")
+            print(f"Current score: {scores[i]}")
+            try:
+                new_score = float(input("Enter new score (0-100): ").strip())
+            except ValueError:
+                print("Error: Score must be a number!")
+                return
+            if new_score < 0 or new_score > 100:
+                print("Error: Score must be between 0 and 100!")
+                return
+            scores[i] = new_score
+            print(f"Score updated successfully to {new_score}!")
+            return
+    print(f"Participant '{name}' not found!")
 
 def remove_participant():
-    print("\n" + "-"*60)
-    print("REMOVE PARTICIPANT")
-    print("-"*60)
-    
-    name = input("Enter participant's name to remove: ").strip()
-    
-    if name == "":
+    name = input("Enter name to remove: ").strip()
+    if not name:
         print("Error: Name cannot be empty!")
         return
-    
-    found_index = -1
     for i in range(len(participants)):
         if participants[i].lower() == name.lower():
-            found_index = i
-            break
-    
-    if found_index == -1:
-        print(f"Participant '{name}' not found!")
-        return
-    
-    removed_name = participants.pop(found_index)
-    removed_score = scores.pop(found_index)
-    print(f"Removed '{removed_name}' (score: {removed_score})")
+            removed_name = participants.pop(i)
+            removed_score = scores.pop(i)
+            print(f"Removed '{removed_name}' (score: {removed_score})")
+            return
+    print(f"Participant '{name}' not found!")
 
 def display_scoreboard():
-    print("\n" + "="*60)
-    print("SCOREBOARD (Ranked by Score)")
-    print("="*60)
-    print("Rank   Name                 Score")
-    print("-"*60)
-    
-    combined = []
-    for i in range(len(participants)):
-        combined.append((scores[i], participants[i]))
-    
+    combined = [(scores[i], participants[i]) for i in range(len(participants))]
     for i in range(len(combined)):
         for j in range(i + 1, len(combined)):
             if combined[i][0] < combined[j][0]:
-                temp = combined[i]
-                combined[i] = combined[j]
-                combined[j] = temp
-    
+                combined[i], combined[j] = combined[j], combined[i]
+    print("\nSCOREBOARD (Ranked by Score)")
     for rank in range(len(combined)):
-        score = combined[rank][0]
-        name = combined[rank][1]
-        print(f"{rank + 1:<6} {name:<20} {score:<8}")
-    print("="*60)
+        print(f"#{rank + 1} {combined[rank][1]} - Score: {combined[rank][0]}")
 
 def calculate_statistics():
-    print("\n" + "-"*60)
-    print("STATISTICS")
-    print("-"*60)
-    
-    if len(scores) == 0:
-        print("No participants to calculate statistics.")
+    if not scores:
+        print("No participants.")
         return
-    
-    highest = scores[0]
-    lowest = scores[0]
-    
-    for score in scores:
-        if score > highest:
-            highest = score
-        if score < lowest:
-            lowest = score
-    
-    total = 0
-    for score in scores:
-        total = total + score
-    average = total / len(scores)
-    
-    num_highest = 0
-    num_lowest = 0
-    for score in scores:
-        if score == highest:
-            num_highest = num_highest + 1
-        if score == lowest:
-            num_lowest = num_lowest + 1
-    
-    num_distinction = 0
-    num_qualified = 0
-    num_not_qualified = 0
-    
-    for score in scores:
-        if score >= distinction_score:
-            num_distinction = num_distinction + 1
-        elif score >= qualification_score:
-            num_qualified = num_qualified + 1
-        else:
-            num_not_qualified = num_not_qualified + 1
-    
-    print(f"  Highest Score: {highest} (achieved by {num_highest} participant(s))")
-    
-    highest_names = []
-    for i in range(len(participants)):
-        if scores[i] == highest:
-            highest_names.append(participants[i])
-    print(f"    - {', '.join(highest_names)}")
-    
-    print(f"  Lowest Score: {lowest} (achieved by {num_lowest} participant(s))")
-    
-    lowest_names = []
-    for i in range(len(participants)):
-        if scores[i] == lowest:
-            lowest_names.append(participants[i])
-    print(f"    - {', '.join(lowest_names)}")
-    
-    print(f"  Average Score: {average:.2f}")
-    print(f"  Participants with DISTINCTION (>= {distinction_score}): {num_distinction}")
-    print(f"  Participants QUALIFIED ({qualification_score}-{distinction_score - 1}): {num_qualified}")
-    print(f"  Participants NOT QUALIFIED (< {qualification_score}): {num_not_qualified}")
+    highest = max(scores)
+    lowest = min(scores)
+    average = sum(scores) / len(scores)
+    num_distinction = sum(1 for s in scores if s >= distinction_score)
+    num_qualified = sum(1 for s in scores if qualification_score <= s < distinction_score)
+    num_not_qualified = sum(1 for s in scores if s < qualification_score)
+    print(f"Highest Score: {highest}")
+    print(f"Lowest Score: {lowest}")
+    print(f"Average Score: {average:.2f}")
+    print(f"DISTINCTION: {num_distinction}, QUALIFIED: {num_qualified}, NOT QUALIFIED: {num_not_qualified}")
 
 def generate_final_report():
-    print("\n" + "="*60)
-    print("FINAL COMPREHENSIVE REPORT")
-    print("="*60)
-    
-    combined = []
-    for i in range(len(participants)):
-        combined.append((scores[i], participants[i]))
-    
+    combined = [(scores[i], participants[i]) for i in range(len(participants))]
     for i in range(len(combined)):
         for j in range(i + 1, len(combined)):
             if combined[i][0] < combined[j][0]:
-                temp = combined[i]
-                combined[i] = combined[j]
-                combined[j] = temp
-    
-    print("\nRank   Name                 Score    Status")
-    print("-"*60)
-    
+                combined[i], combined[j] = combined[j], combined[i]
+    print("\nFINAL COMPREHENSIVE REPORT")
     for rank in range(len(combined)):
         score = combined[rank][0]
-        name = combined[rank][1]
-        
         if score >= distinction_score:
             status = "DISTINCTION"
         elif score >= qualification_score:
             status = "QUALIFIED"
         else:
             status = "NOT QUALIFIED"
-        
-        print(f"{rank + 1:<6} {name:<20} {score:<8} {status}")
-    
-    print("-"*60)
+        print(f"#{rank + 1} {combined[rank][1]} - Score: {score} - {status}")
     calculate_statistics()
-    print("="*60)
 
 def main():
     while True:
-        print("\n" + "="*60)
+        print("\n" + "="*50)
         print("STUDENT SCORE MANAGEMENT SYSTEM")
-        print("="*60)
-        print("1. Display all participants")
-        print("2. Add new participant")
-        print("3. Search participant")
-        print("4. Display all statuses")
-        print("5. Check distinctions and passing")
+        print("="*50)
+        print("1. Display all")
+        print("2. Add new")
+        print("3. Search")
+        print("4. Display statuses")
+        print("5. Check distinctions & passing")
         print("6. Update score")
-        print("7. Remove participant")
-        print("8. Display scoreboard")
-        print("9. Show statistics")
-        print("10. Generate final report")
+        print("7. Remove")
+        print("8. Scoreboard")
+        print("9. Statistics")
+        print("10. Final report")
         print("0. Exit")
-        print("="*60)
-        
+        print("="*50)
         choice = input("Enter your choice: ").strip()
-        
         if choice == "0":
             print("Goodbye!")
             break
         elif choice == "1":
-            print("\n" + "="*60)
-            print("CURRENT PARTICIPANTS AND SCORES:")
-            print("="*60)
-            for name, score in zip(participants, scores):
-                print(f"  {name} | Score: {score}")
-            print("="*60)
+            display_all()
         elif choice == "2":
             add_participant()
         elif choice == "3":
@@ -390,7 +196,7 @@ def main():
         elif choice == "10":
             generate_final_report()
         else:
-            print("Invalid choice! Please try again.")
+            print("Invalid choice!")
 
 if __name__ == "__main__":
     main()
